@@ -9,7 +9,7 @@ import logging
 import time
 logging.basicConfig(level=logging.INFO,filename='log/tcp1.log')
 cliqueue = Queue.Queue(5)
-maxsize=3
+maxsize=1000
 flag_thread=True
 def echoclient():
 	while flag_thread:
@@ -23,8 +23,12 @@ def echoclient():
 			else:
 				total+=data
 				logging.info('data:'+str(data))
+                                print 'data:',data
 				newclisock.send(time.ctime()+data)
-		newclisock.send(total)
+                try:
+		    newclisock.send(total)
+                except Exception,e:
+                    print e
 	
 		
 
@@ -34,6 +38,7 @@ def startserver():
 	port=11248	
 	tcpserver = socket.socket(socket.AF_INET,socket.SOCK_STREAM)	
 	tcpserver.bind((ip,port))
+        print 'server listen in ',port
 	tcpserver.listen(3)
 
 
@@ -44,6 +49,7 @@ def startserver():
 	while True:
 		try:
 			newcli,addr = tcpserver.accept()	
+                        print 'connect from ',addr
 			logging.info('connect from'+str(addr))
 			cliqueue.put(newcli,1)
 		except Exception,e:
