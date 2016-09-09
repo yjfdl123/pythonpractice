@@ -1,12 +1,14 @@
 #coding=utf-8
 import threading
-
+mutex = threading.Lock()
 class Counter(object):
 	def __init__(self):
 		self.x = 1
 
 	def incre(self):
-		self.x +=1
+		# with mutex:
+		if 1:
+			self.x +=1
 
 	def out(self):
 		print self.x
