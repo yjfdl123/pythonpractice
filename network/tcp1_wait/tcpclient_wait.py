@@ -3,6 +3,7 @@
 
 
 import socket
+import config
 import time
 import logging
 logging.basicConfig(level=logging.INFO,filename='log/cli1.log')
@@ -11,21 +12,17 @@ logging.basicConfig(level=logging.INFO,filename='log/cli1.log')
 maxsize = 1000
 def startclient():
 	ip = 'localhost'
-	port=11248	
+	port=config.port
 	tcpsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	try:	
-		tcpsock.connect((ip,port))
-	except Exception,e:
-		print 'not connect',Exception
-		print e 
-		return	
+	tcpsock.connect((ip,port))
+
 
 	while True:
 		data = raw_input('>')
 		print 'send:',data
 		if  data:
 			try:	
-				tcpsock.send(data)
+				tcpsock.sendall(data)
 			except:
 				print 'send error'
 				print Exception
